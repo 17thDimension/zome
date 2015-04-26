@@ -3,31 +3,27 @@ append = (ele, txt) ->
   div.innerHTML = txt
   ele.appendChild(div)
 
-class Text
-  constructor: (@name) ->
+class Polygon
+  constructor: (@edges) ->
 
-  write: (label) ->
-    str = "Scripted lorem ipsum text - #{label} - " + @name
-    append(document.body, str)
+  render: () ->
+    console.log(@edges)
+    r = window.op.selectAll("polygon")
+      .data([@edges])
+      .enter().append("polygon")
+      .attr 'points', (d) ->
+        d.map((d) ->
+          [d.x, d.y].join ','
+        ).join ' '
+      .attr("stroke","black")
+      .attr("stroke-width",2)
 
-class Foo extends Text
-  write: -> super "foo"
-
-class Bar extends Text
-  write: -> super "bar"
-
-class Baz
-  foo = new Foo "3"
-  bar = new Bar "4"
-  write: ->
-    foo.write()
-    bar.write()
-
-a = new Foo "1"
-b = new Bar "2"
-a.write()
-b.write()
 document.onreadystatechange = () ->
   if document.readyState is "complete"
-    c = new Baz
-    c.write()
+    window.op =d3.select("body").append("svg")
+         .attr("width", 1000)
+         .attr("height", 667)
+    triangle = [ { "x": 500,   "y": 0},  { "x": 1000,  "y": 600},
+                  { "x": 0,  "y": 600}, { "x": 500,  "y": 0}];
+    serpent = new Polygon(triangle)
+    serpent.render()

@@ -9,19 +9,19 @@ gulp.task('templates', function() {
   var locs = {};
   gulp.src('./src/**/*.jade')
     .pipe(jade({locals: locs}))
-    .pipe(gulp.dest('./public'))
+    .pipe(gulp.dest('.'))
 });
 
 gulp.task('scripts', function() {
   gulp.src('./src/**/*.coffee')
     .pipe(coffee({bare: true}).on('error', log))
-    .pipe(gulp.dest('./public/assets'))
+    .pipe(gulp.dest('./assets'))
 });
 
 gulp.task('styles', function() {
   gulp.src('./src/**/*.styl')
     .pipe(stylus())
-    .pipe(gulp.dest('./public/assets'))
+    .pipe(gulp.dest('./assets'))
 });
 
 gulp.task('watch', function() {
@@ -32,7 +32,7 @@ gulp.task('watch', function() {
 gulp.task('browserSync', ['build'], function() {
   browserSync({
     server: {
-      baseDir: './public'
+      baseDir: '.'
     }
   });
 });

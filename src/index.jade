@@ -1,11 +1,19 @@
 doctype html
 html(lang="en")
   head
-    title="Stubeeee"
+    title="Space"
     link(rel='stylesheet', href='./assets/styles.css')
     script(src='./assets/detector.js')
     script(src='./assets/three.js')
-    script(src='./assets/init.js')
+    script(src='./assets/unicorn.js')
+    script(src='./assets/constants.js')
   body
-    audio(autoplay='true',src='./assets/navi.ogg')
+    //-.interface
+      input#helixes(type='range',value='6')
+      input#diameter(type='range',value='100')
+      input#height(type='range',value='100')
+      input#stretch(type='range',value='100')
+
+  footer
+    script(src='./assets/space.js')
     

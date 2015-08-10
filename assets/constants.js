@@ -1,0 +1,9 @@
+UPKEY=38
+DOWNKEY=40
+LEFTKEY=37
+RIGHTKEY=39
+FORWARDKEY=30
+BACKKEY=39
+window.sin=Math.sin
+window.cos=Math.cos
+window.PI=Math.PI

@@ -1,24 +1,24 @@
-var animate, camera, color, container, geometry, h, i, init, materials, mouseX, mouseY, onDocumentMouseMove, onDocumentTouchMove, onDocumentTouchStart, onWindowResize, parameters, particles, render, renderer, scene, size, windowHalfX, windowHalfY;
+var animate, init, onDocumentMouseMove, onDocumentTouchMove, onDocumentTouchStart, onWindowResize, render;
 
 init = function() {
-  var camera, color, container, geometry, i, parameters, particles, renderer, scene, size, vertex;
+  var color, container, geometry, i, particles, size, sphere, sphereGeometry, sphereMaterial, vertex;
   container = document.createElement('div');
   document.body.appendChild(container);
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
-  camera.position.z = 1000;
+  camera.position.z = 500;
   scene = new THREE.Scene;
-  scene.fog = new THREE.FogExp2(0x000000, 0.0007);
+  scene.fog = new THREE.FogExp2(0x000000, 0.00001);
   geometry = new THREE.Geometry;
   i = 0;
-  while (i < 20000) {
+  while (i < 17000) {
     vertex = new THREE.Vector3;
-    vertex.x = Math.random() * 2000 - 1000;
-    vertex.y = Math.random() * 2000 - 1000;
-    vertex.z = Math.random() * 2000 - 1000;
+    vertex.x = Math.cos(i)*i;
+    vertex.y = Math.sin(i)*i ;
+    vertex.z = Math.random()*i;
     geometry.vertices.push(vertex);
     i++;
   }
-  parameters = [[[1, 1, 0.5], 5], [[0.95, 1, 0.5], 4], [[0.90, 1, 0.5], 3], [[0.85, 1, 0.5], 2], [[0.80, 1, 0.5], 1]];
+  parameters = [[[1, 1, 0.5], 5], [[0.55, 1, 0.5], 4], [[0.60, 1, 0.5], 3], [[0.85, .5, 0.5], 2], [[0.70, 1, 0.5], 1]];
   i = 0;
   while (i < parameters.length) {
     color = parameters[i][0];
@@ -27,15 +27,24 @@ init = function() {
       size: size
     });
     particles = new THREE.PointCloud(geometry, materials[i]);
-    particles.rotation.x = Math.random() * 6;
-    particles.rotation.y = Math.random() * 6;
-    particles.rotation.z = Math.random() * 6;
+    particles.rotation.x = Math.sin(i) * 17;
+    particles.rotation.y = Math.cos(i) * 17;
+    particles.rotation.z = Math.sin(i) * 17;
+    sphereGeometry = new THREE.SphereGeometry(100, 32, 32);
+    sphereMaterial = new THREE.MeshBasicMaterial({
+      color: 0xffffff
+    });
+    sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    scene.add(sphere);
     scene.add(particles);
     i++;
   }
-  renderer = new THREE.WebGLRenderer;
+  renderer = new THREE.WebGLRenderer({
+    alpha: true
+  });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
   container.appendChild(renderer.domElement);
   document.addEventListener('mousemove', onDocumentMouseMove, false);
   document.addEventListener('touchstart', onDocumentTouchStart, false);
@@ -84,21 +93,21 @@ animate = function() {
 render = function() {
   var color, h, i, object, time;
   time = Date.now() * 0.00005;
-  camera.position.x += (mouseX - camera.position.x) * 0.05;
-  camera.position.y += (-mouseY - camera.position.y) * 0.05;
+  camera.position.x += (mouseX - camera.position.x) * 0.15;
+  camera.position.y += (-mouseY - camera.position.y) * 0.15;
   camera.lookAt(scene.position);
   i = 0;
   while (i < scene.children.length) {
     object = scene.children[i];
     if (object instanceof THREE.PointCloud) {
-      object.rotation.y = time * (i < 4 ? i + 1 : -(i + 1));
+      object.rotation.y = time * (i < 3 ? i + 1 : -(i + 2));
     }
     i++;
   }
   i = 0;
   while (i < materials.length) {
     color = parameters[i][0];
-    h = 360 * (color[0] + time) % 360 / 360;
+    h = 120 * (color[0] + time) % 360 / 360;
     materials[i].color.setHSL(h, color[1], color[2]);
     i++;
   }
@@ -109,37 +118,37 @@ if (!Detector.webgl) {
   Detector.addGetWebGLMessage();
 }
 
-container = void 0;
+window.container;
 
-camera = void 0;
+window.camera;
 
-scene = void 0;
+window.scene;
 
-renderer = void 0;
+window.renderer;
 
-particles = void 0;
+window.particles;
 
-geometry = void 0;
+window.geometry;
 
-materials = [];
+window.materials = [];
 
-parameters = void 0;
+window.parameters;
 
-i = void 0;
+window.i;
 
-h = void 0;
+window.h;
 
-color = void 0;
+window.color;
 
-size = void 0;
+window.size;
 
-mouseX = 0;
+window.mouseX = 0;
 
-mouseY = 0;
+window.mouseY = 0;
 
-windowHalfX = window.innerWidth / 2;
+window.windowHalfX = window.innerWidth / 2;
 
-windowHalfY = window.innerHeight / 2;
+window.windowHalfY = window.innerHeight / 2;
 
 document.addEventListener('DOMContentLoaded', function() {
   init();

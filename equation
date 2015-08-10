@@ -1,0 +1,10 @@
+x = sin(a+b) d/4 + sin(b) d/4
+y = cos(a+b) d/4 +cos(b) d/4
+z = (a/ pi) d/2 vs or a / pi h
+a = 0..pi
+b = 2pi/n
+n= amount of helixes
+i = 0..n-1
+d=diameter
+vs = stretch 1-2
+h = height

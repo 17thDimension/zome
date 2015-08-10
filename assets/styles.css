@@ -1,5 +1,14 @@
+.interface {
+  position: absolute;
+  padding: 20px;
+  border: 10px;
+}
+.interface input {
+  padding: 10px;
+  width: 54px;
+  font-size: 20px;
+}
 body {
-  background-image: url("./bg.jpg");
   background-size: cover;
   margin: 0px;
   overflow: hidden;

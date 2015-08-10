@@ -6,13 +6,16 @@ html(lang="en")
     script(src='./assets/detector.js')
     script(src='./assets/three.js')
     script(src='./assets/unicorn.js')
+    script(src='./assets/jquery.js')
+    script(src='./assets/TrackballControls.js')
     script(src='./assets/constants.js')
   body
-    //-.interface
-      input#helixes(type='range',value='6')
-      input#diameter(type='range',value='100')
-      input#height(type='range',value='100')
-      input#stretch(type='range',value='100')
+    .interface
+      form(onInput='updateZome()')
+        input#helixes(type='range',value='108')
+        input#diameter(type='range',value='54')
+        input#height(type='range',value='10')
+        input#offset(type='range',value='0',min='-3.14',max='3.14',step='.01')
 
   footer
     script(src='./assets/space.js')

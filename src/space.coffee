@@ -3,7 +3,7 @@ scene = undefined
 renderer = undefined
 geometry = undefined
 material = undefined
-myShip = undefined
+spaceShip = undefined
 window.propulsion=.01
 window.viscosity = .99
 
@@ -20,25 +20,17 @@ birth = (matter)->
   matter.accelleration =new THREE.Vector3()
   matter.spin =new THREE.Vector3()
 
+positionCamera = ->
+  camera.position.z = 30
+  camera.position.y=-50
+  camera.rotateX(1)
 
-init = ->
-
-  camera = new THREE.
-    PerspectiveCamera(75, window.innerWidth / window.innerHeight, 3, 1000)
-  camera.position.z = 200
-  scene = new THREE.Scene
+architectZome = (n,d,h,offset) ->
   geometry = new THREE.Geometry
-  geometry.vertices.push top
   layer = n - 1
-  d= 54
-  n = 108
-  a = 0
-  h=10
-  ϕ= (1+Math.sqrt(5))/2
-  vs = ϕ * 2
+  ϕ = (1+Math.sqrt(5))/2
   for i in [1..n]
-    vs = ϕ /PI* i
-    a=-PI
+    a=offset
     b=2*PI/n*i
     while a < PI
       vertex = new THREE.Vector3
@@ -48,23 +40,40 @@ init = ->
       #(a/ PI)* vs * d
       geometry.vertices.push vertex
       a+=PI/2764
-
-      # or a / pi h
-
-
-
   material = new THREE.PointCloudMaterial(sizeAttenuation:false)
-  myShip = new THREE.PointCloud(geometry, material)
-  scene.add myShip
-  birth(myShip)
+  scene.remove(spaceShip)
+  spaceShip = new THREE.PointCloud(geometry, material)
+  scene.add spaceShip
+  birth(spaceShip)
+
+init = ->
+
+  camera = new THREE.
+    PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000)
+  scene = new THREE.Scene
   birth(camera)
+  positionCamera()
+  updateZome()
   renderer = new THREE.WebGLRenderer()
   renderer.setSize window.innerWidth, window.innerHeight
   document.body.appendChild renderer.domElement
   return
+updateZome = ->
+  helixes = parseFloat $('#helixes').val()
+  diameter = parseFloat $('#diameter').val()
+  height = parseFloat $('#height').val()
+  offset = parseFloat $('#offset').val()
+  architectZome(helixes,diameter,height,offset)
+updateCamera = ->
+  rotateX = parseFloat $('#helixes').val()
+  rotateY = parseFloat $('#diameter').val()
+  rotateZ = parseFloat $('#height').val()
+  offset = parseFloat $('#offset').val()
+  architectZome(helixes,diameter,height,offset)
+
 
 animate = ->
-  timeTravel(myShip,1)
+  timeTravel(spaceShip,1)
   timeTravel(camera,1)
   requestAnimationFrame animate
   renderer.render scene, camera
@@ -78,18 +87,18 @@ document.onkeyup = (e) ->
   e = e or window.event
   charCode = if typeof e.which == 'number' then e.which else e.keyCode
   switch String.fromCharCode(charCode)
-    when 'W' then myShip.accelleration.z+=propulsion
-    when 'E' then myShip.accelleration.x+=propulsion
-    when 'S' then myShip.velocity.multiplyScalar(0.1) #myShip.position.z--
-    when 'A' then myShip.accelleration.y+=propulsion
-    when 'D' then myShip.accelleration.y-=propulsion
-    when 'X' then myShip.accelleration.z-=propulsion
-    when 'Z' then myShip.accelleration.x-=propulsion
-    when 'R' then myShip.spin.x=.1
-    when 'F' then myShip.spin.y=.1
-    when 'V' then myShip.spin.z=.1
-    when 'T' then myShip.spin.x=-.1
-    when 'G' then myShip.spin.y=-.1
-    when 'B' then myShip.spin.z=-.1
+    when 'W' then spaceShip.accelleration.z+=propulsion
+    when 'E' then spaceShip.accelleration.x+=propulsion
+    when 'S' then spaceShip.velocity.multiplyScalar(0.1) #spaceShip.position.z--
+    when 'A' then spaceShip.accelleration.y+=propulsion
+    when 'D' then spaceShip.accelleration.y-=propulsion
+    when 'X' then spaceShip.accelleration.z-=propulsion
+    when 'Z' then spaceShip.accelleration.x-=propulsion
+    when 'R' then spaceShip.spin.x=.1
+    when 'F' then spaceShip.spin.y=.1
+    when 'V' then spaceShip.spin.z=.1
+    when 'T' then spaceShip.spin.x=-.1
+    when 'G' then spaceShip.spin.y=-.1
+    when 'B' then spaceShip.spin.z=-.1
 
   return
